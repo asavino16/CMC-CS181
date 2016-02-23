@@ -17,7 +17,7 @@ It appears to not be compressing that effectively. I'm unsure why but I would gu
 
 2) 
 Random.org 
-Compression ratio: 1M/
+Compression ratio: (my program would not terminate)-I think the file was too big
 Entropy: 5.545043246556351
 
 3) Data that is less random might compress better, because with random data it'll take way longer to find long matches. Possibly song lytics would compress better because sentences are more likely to be repeated than in novels. 
