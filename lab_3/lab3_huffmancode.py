@@ -36,7 +36,6 @@ def tolist(histogram):
  
 
 #takes in list of characters with number of occurences and builds binary tree 
-#(ex: [('a',5), ('b', 10), ('c', 1), ('d',2), ('e',15), ('f', 4)]
 def build_tree(lst):
     lst = sorted(lst, key=lambda y: y[1]) #sorts by second item in tuple (ex: [('c', 1), ('d', 2), ('f', 4)...])
     while len(lst)>1: 
@@ -44,7 +43,10 @@ def build_tree(lst):
         y=lst[1]
         v=z[1]+y[1]
         k=[z[0],y[0]]
-        lst = list(merge(lst[2:], [(k,v)]))
+        lst=lst[2:]
+        lst.append([k,v])
+        lst = sorted(lst, key=lambda y:y[1])
+        #lst = list(merge(lst[2:], [(k,v)]))
     tree =lst[0][0]
     return tree
 
