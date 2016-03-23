@@ -1,11 +1,12 @@
 #Alex Savino 
 #CS 181
-#Lab 3
+#Lab 3 part A
 import os
 import sys 
 import operator 
 import json
 from heapq import merge 
+import hashlib
  
 def parse_file(filename): 
     d= {}
@@ -59,19 +60,88 @@ def huffman(lst, side, code):
         right=huffman(lst[1], side+"1",code) 
     return code
     
-   
+
+def encode(filename, huff_code): 
+     l=[]
+     a = ""
+     with open(filename, "rb") as f:
+         text = f.read()
+         text1=list(text)
+         for item in text1:
+             if item.isalpha():
+                 l.append(item)
+             #else: 
+             #    l.append(hex(ord(item)))
+
+         for item in l: 
+             a = a + huff_code[item]
+     return a
+
+def check_length8(answer):
+    tally=0
+    for ch in answer: 
+        tally+=1
+    print tally
+    if (tally%8==0):
+        return answer
+    else:
+        diff = tally%8
+        diff1=8-diff
+        zero = diff1*"0"
+        answer=zero+answer
+        return answer
+
+def convert_binary(string, output):
+    tlly=0
+    byte=""
+    final=""
+    for ch in string:
+        while tlly <9: 
+           byte+=ch
+           tlly+=1
+        integer = int(byte,2)
+        output.write(integer)
+        
+ 
 def main():
+
+#1.1 Importing file 
     file1 = sys.argv[1]
+
+#1.2 Calculating statistics on binary data 
     parsing = parse_file(file1)
     histogram = convert_hex(parsing)
     new = tolist(histogram)
-    
+
+#1.2 Creating Huffman code 
     tree = build_tree(new)
     code=[]
     final = dict(huffman(tree, "", code))
-    
+
+#1.3 Printing out Huffman code 
     print json.dumps({"Huffman code": final})
 
+#2.1 Encoding data using the huffman code    
+    encoded_file = encode(file1, final)
+    encoded_string = check_length8(encoded_file) 
+    print json.dumps({"Encoded string ": encoded_string})
+    
+#2.2 Creating header for compressed file 
+    file_size = os.path.getsize(file1)
+    hash_size = hashlib.md5(open(file1, 'rb').read()).hexdigest()
+    compressed = open("compressed.bin", "wb")
+    compressed.write(json.dumps({"File size": file_size, "Hash": hash_size}))
+    compressed.write(json.dumps({"Huffman code": final}))               
+     
+#2.3 Converting binary string to binary data and writing to output file                  
+    write_data = convert_binary(encoded_string, compressed)    
+
+"""
+The huffman code does not encode characters that aren't from the alphabet - is this a problem? 
+For my encoded string, I just ignore all characters that aren't from the alphabet because it's not in my huffman code
+Am I doing file size and hash correctly? 
+Am I converting it to binary data correctly? 
+"""
 
 if __name__ == '__main__':
     main()
