@@ -20,15 +20,6 @@ def parse_file(filename):
                 d[item]=d[item] +1
     return d 
 
-def convert_hex(histogram):
-    d={} 
-    for key in histogram: 
-        if key.isalpha():
-            d[key]=histogram[key]
-        else: 
-            d[hex(ord(key))]=histogram[key]          
-    return d
-
 def tolist(histogram): 
     lst = []
     for key in histogram: 
@@ -68,11 +59,7 @@ def encode(filename, huff_code):
          text = f.read()
          text1=list(text)
          for item in text1:
-             if item.isalpha():
-                 l.append(item)
-             #else: 
-             #    l.append(hex(ord(item)))
-
+             l.append(item)
          for item in l: 
              a = a + huff_code[item]
      return a
@@ -88,59 +75,52 @@ def check_length8(answer):
         diff = tally%8
         diff1=8-diff
         zero = diff1*"0"
-        answer=zero+answer
+        answer=answer+zero
         return answer
 
 def convert_binary(string, output):
-    tlly=0
-    byte=""
-    for ch in string:
-        while tlly <9: 
-           byte+=ch
-           tlly+=1
-        integer = int(byte,2)
-        output.write("integer")
+    for i in range(0, len(string),8): 
+        integer_string = string[i:i+8]
+        a = 0
+        for j in range(7,-1, -1):
+            a+=pow(2, j)*int(integer_string[7-j])
+        output.write(struct.pack("B", a))
         
- 
+        
 def main():
 
 #1.1 Importing file 
     file1 = sys.argv[1]
 
 #1.2 Calculating statistics on binary data 
-    parsing = parse_file(file1)
-    histogram = convert_hex(parsing)
+    histogram = parse_file(file1)
+    #histogram = convert_hex(parsing)
     new = tolist(histogram)
 
 #1.2 Creating Huffman code 
     tree = build_tree(new)
     code=[]
     final = dict(huffman(tree, "", code))
-
+    
 #1.3 Printing out Huffman code 
-    print json.dumps({"Huffman code": final})
+    #print json.dumps({"Huffman code": final})
 
 #2.1 Encoding data using the huffman code    
     encoded_file = encode(file1, final)
     encoded_string = check_length8(encoded_file) 
-    print json.dumps({"Encoded string ": encoded_string})
+    #print json.dumps({"Encoded string ": encoded_string})
     
 #2.2 Creating header for compressed file 
     file_size = os.path.getsize(file1)
     hash_size = hashlib.md5(open(file1, 'rb').read()).hexdigest()
+    header = {"size": file_size, "hash": hash_size}
     compressed = open("compressed.bin", "wb")
-    compressed.write(json.dumps({"File size": file_size, "Hash": hash_size}))
-    compressed.write(json.dumps({"Huffman code": final}))               
+    compressed.write(json.dumps(header)+"\n")
+    compressed.write(json.dumps(final)+"\n")               
      
 #2.3 Converting binary string to binary data and writing to output file                  
-    write_data = convert_binary(encoded_string, compressed)    
+    convert_binary(encoded_string, compressed)    
 
-"""
-The huffman code does not encode characters that aren't from the alphabet - is this a problem? 
-For my encoded string, I just ignore all characters that aren't from the alphabet because it's not in my huffman code
-Am I doing file size and hash correctly? 
-Am I converting it to binary data correctly? 
-"""
 
 if __name__ == '__main__':
     main()
