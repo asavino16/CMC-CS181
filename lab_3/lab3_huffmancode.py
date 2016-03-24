@@ -3,10 +3,10 @@
 #Lab 3 part A
 import os
 import sys 
-import operator 
 import json
 from heapq import merge 
 import hashlib
+import struct
  
 def parse_file(filename): 
     d= {}
@@ -94,13 +94,12 @@ def check_length8(answer):
 def convert_binary(string, output):
     tlly=0
     byte=""
-    final=""
     for ch in string:
         while tlly <9: 
            byte+=ch
            tlly+=1
         integer = int(byte,2)
-        output.write(integer)
+        output.write("integer")
         
  
 def main():
