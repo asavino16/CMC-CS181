@@ -1,6 +1,8 @@
 #Alex Savino 
 #CS 181
-#Lab 3 part A
+#Lab 3 
+#Part A: Huffman Encoding Compression 
+#Part B: Huffman Encoding Based Compression 
 import os
 import sys 
 import json
@@ -119,8 +121,8 @@ def main():
     compressed.write(json.dumps(final)+"\n")               
      
 #2.3 Converting binary string to binary data and writing to output file                  
-    convert_binary(encoded_string, compressed)    
-
+    convert_binary(encoded_string, compressed)  
+    
 
 if __name__ == '__main__':
     main()
