@@ -12,3 +12,10 @@ Compression ratios:
 US Constitution: 44K/26K
 Drinks list: 47K/29K
 The Aliens III Script: 71K/37K
+
+Part c: 
+Compressed USConstitution into "compressed.bin" and effectively decompressed it into file called "decompressed.txt". It looks the exact same as the original file. 
+
+Part 4: Extra Credit 
+Switched files with Iris and Kayla and decompressed the given files effectively. 
+
