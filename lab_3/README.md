@@ -17,5 +17,5 @@ Part c:
 Compressed USConstitution into "compressed.bin" and effectively decompressed it into file called "decompressed.txt". It looks the exact same as the original file. 
 
 Part 4: Extra Credit 
-Switched files with Iris and Kayla and decompressed the given files effectively. 
+Switched files with Iris and Kayla. The decompression worked with Iris but with Kayla's file it gave me an error: Non-ASCII character '\xfd' in file compressed_kayla.txt. 
 
